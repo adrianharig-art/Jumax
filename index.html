@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JUMAX Elektrotechnik — Dein Zuhause. Deine Energie.</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root{--dark:#050910;--dark2:#0b1018;--dark3:#111825;--mint:#00d4aa;--mint2:#00ffcc;--gold:#d4a844;--gold2:#f0c75e;--w:#f4f6f9;--ww:#ffffff;--g:#6b7fa0;--gl:#95a8c4;--light:#f8fafb;--light2:#edf1f5;--red:#ff6b6b;--txt:#1a2332}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ww);color:var(--txt);font-family:'DM Sans',sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.6}
+.fd{font-family:'Syne',sans-serif}
+::selection{background:var(--mint);color:var(--dark)}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+
+/* SCROLL PROGRESS */
+#sp{position:fixed;top:0;left:0;height:3px;z-index:100;background:linear-gradient(90deg,var(--mint),var(--gold));box-shadow:0 0 20px var(--mint);width:0;transition:width .1s}
+
+/* REVEAL */
+.rv{opacity:0;transform:translateY(60px);transition:all 1s cubic-bezier(.22,1,.36,1)}.rv.v{opacity:1;transform:none}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:90;transition:all .5s}
+.nav.scrolled{background:rgba(255,255,255,.85);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 1px 30px rgba(0,0,0,.06);border-bottom:1px solid rgba(0,0,0,.04)}
+.nav.dark-mode{background:rgba(5,9,16,.7);backdrop-filter:blur(24px)}
+.nav-i{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:80px;transition:height .5s}
+.nav.scrolled .nav-i{height:64px}
+.nav-logo{display:flex;align-items:center;gap:12px}
+.nav-ic{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--mint),#00a88a);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,212,170,.25);transition:all .4s}
+.nav-logo:hover .nav-ic{box-shadow:0 4px 24px rgba(0,212,170,.4);transform:scale(1.05)}
+.nav-lk{display:flex;gap:32px}.nav-lk a{font-size:14px;color:rgba(255,255,255,.7);transition:color .3s;font-weight:500}.nav-lk a:hover{color:var(--mint)}
+.nav.scrolled .nav-lk a{color:var(--txt);opacity:.6}.nav.scrolled .nav-lk a:hover{color:var(--mint);opacity:1}
+.nav-cta{display:inline-flex;align-items:center;gap:8px;background:var(--mint);color:var(--dark);padding:10px 22px;border-radius:100px;font-weight:700;font-size:14px;transition:all .3s;border:none;box-shadow:0 2px 16px rgba(0,212,170,.3)}
+.nav-cta:hover{background:var(--mint2);box-shadow:0 4px 28px rgba(0,212,170,.45);transform:translateY(-1px)}
+.m-btn{display:none;background:none;border:1px solid rgba(255,255,255,.2);width:42px;height:42px;border-radius:10px;color:white;font-size:20px}
+.nav.scrolled .m-btn{border-color:rgba(0,0,0,.1);color:var(--txt)}
+.m-menu{display:none;position:absolute;top:100%;left:0;right:0;background:rgba(255,255,255,.97);backdrop-filter:blur(24px);padding:16px 24px;box-shadow:0 20px 60px rgba(0,0,0,.1)}
+.m-menu.open{display:block}
+.m-menu a{display:block;padding:14px 0;font-size:18px;color:var(--txt);border-bottom:1px solid rgba(0,0,0,.06);font-weight:500}
+@media(max-width:1024px){.nav-lk{display:none}.m-btn{display:flex;align-items:center;justify-content:center}}
+
+/* HERO — VIDEO/ANIMATED BG */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;color:white}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-video{position:absolute;inset:0;object-fit:cover;width:100%;height:100%;opacity:.35}
+.hero-mesh{position:absolute;inset:0;background:linear-gradient(135deg,#0a1628 0%,#0d2137 25%,#0a1a2e 50%,#081420 75%,#050910 100%);background-size:400% 400%;animation:meshMove 20s ease infinite}
+@keyframes meshMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(5,9,16,.3),rgba(5,9,16,.7) 80%)}
+.hero-particles{position:absolute;inset:0;overflow:hidden}
+.particle{position:absolute;width:2px;height:2px;background:var(--mint);border-radius:50%;opacity:0;animation:particleFloat linear infinite}
+@keyframes particleFloat{0%{transform:translateY(100vh) translateX(0);opacity:0}10%{opacity:.6}90%{opacity:.6}100%{transform:translateY(-10vh) translateX(40px);opacity:0}}
+.hero-gradient-orb{position:absolute;border-radius:50%;filter:blur(120px);animation:orbFloat 12s ease-in-out infinite}
+@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-40px) scale(1.1)}66%{transform:translate(-20px,20px) scale(.95)}}
+
+.hero-inner{position:relative;z-index:10;max-width:1280px;margin:0 auto;padding:0 24px;width:100%}
+.hero h1{font-family:'Syne',sans-serif;font-weight:800;line-height:.9;letter-spacing:-.04em;margin-bottom:28px;font-size:clamp(2.8rem,7vw,6rem)}
+.hero h1 span{display:block}
+.text-shine{background:linear-gradient(90deg,var(--mint),var(--mint2) 25%,var(--gold2) 50%,var(--mint) 100%);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:textShine 5s linear infinite}
+@keyframes textShine{0%{background-position:-200% center}100%{background-position:200% center}}
+.hero-sub{font-size:clamp(17px,2vw,22px);color:rgba(255,255,255,.7);max-width:560px;line-height:1.6;margin-bottom:40px}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:16px;margin-bottom:48px}
+.btn-hero{display:inline-flex;align-items:center;gap:12px;background:var(--mint);color:var(--dark);padding:18px 36px;border-radius:100px;font-weight:700;font-size:18px;transition:all .4s;border:none;box-shadow:0 4px 30px rgba(0,212,170,.35)}
+.btn-hero:hover{background:var(--mint2);box-shadow:0 8px 50px rgba(0,212,170,.5);transform:translateY(-2px)}
+.btn-hero-s{display:inline-flex;align-items:center;gap:8px;padding:18px 32px;border-radius:100px;font-weight:600;font-size:18px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.05);backdrop-filter:blur(12px);color:white;transition:all .4s}
+.btn-hero-s:hover{border-color:rgba(0,212,170,.3);background:rgba(0,212,170,.08)}
+.hero-trust{display:flex;flex-wrap:wrap;gap:8px 28px;font-size:14px;color:rgba(255,255,255,.5)}
+.hero-trust span{display:flex;align-items:center;gap:8px}
+@media(max-width:640px){.hero-ctas{flex-direction:column}.btn-hero,.btn-hero-s{justify-content:center;width:100%}}
+.hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:8px}
+.hero-scroll span{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.3)}
+.scroll-line{width:1px;height:32px;overflow:hidden}.scroll-line-inner{width:100%;height:100%;background:var(--mint);transform-origin:top;animation:scrollLine 2s ease-in-out infinite}
+@keyframes scrollLine{0%{transform:scaleY(0);opacity:0}50%{transform:scaleY(1);opacity:1}100%{transform:scaleY(0);opacity:0}}
+
+/* ═══ LIGHT SECTIONS ═══ */
+.section-light{background:var(--ww);color:var(--txt);padding:100px 0 120px}
+.section-light-alt{background:var(--light);color:var(--txt);padding:100px 0 120px}
+.sl-l{color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;margin-bottom:12px;display:block}
+.st-l{font-family:'Syne',sans-serif;font-weight:800;color:var(--txt);line-height:1.05;letter-spacing:-.02em}
+.mint-text{color:var(--mint)}
+
+/* ═══ DARK SECTIONS ═══ */
+.section-dark{background:var(--dark);color:var(--w);padding:100px 0 120px;position:relative;overflow:hidden}
+.section-dark-mesh{position:absolute;inset:0;background:linear-gradient(135deg,#0a1628,#0d1f35,#081420);background-size:300% 300%;animation:meshMove 25s ease infinite;opacity:.8}
+.sl-d{color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.3em;text-transform:uppercase;margin-bottom:12px;display:block}
+
+/* CONTAINERS */
+.cx{max-width:1280px;margin:0 auto;padding:0 24px}
+.cm{max-width:960px;margin:0 auto;padding:0 24px}
+.cs{max-width:768px;margin:0 auto;padding:0 24px}
+
+/* USP BANNER */
+.usp-banner{padding:80px 0;background:var(--dark);position:relative;overflow:hidden}
+.usp-banner::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,212,170,.04),rgba(212,168,68,.03),rgba(0,212,170,.04));background-size:200% 100%;animation:meshMove 15s ease infinite}
+.usp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative;z-index:1}
+@media(max-width:768px){.usp-grid{grid-template-columns:1fr;gap:32px}}
+.usp-item{text-align:center;padding:20px 24px;position:relative}
+.usp-item:not(:last-child)::after{content:'';position:absolute;right:0;top:20%;height:60%;width:1px;background:rgba(255,255,255,.06)}
+@media(max-width:768px){.usp-item:not(:last-child)::after{display:none}}
+.usp-num{font-family:'Syne',sans-serif;font-size:clamp(52px,9vw,80px);font-weight:800;line-height:1;margin-bottom:8px}
+.usp-label{font-size:15px;color:var(--gl);font-weight:500}
+
+/* CARDS — LIGHT */
+.card-l{background:var(--ww);border-radius:24px;padding:36px;border:1px solid rgba(0,0,0,.06);box-shadow:0 4px 24px rgba(0,0,0,.03);transition:all .5s}
+.card-l:hover{box-shadow:0 8px 40px rgba(0,0,0,.07);transform:translateY(-4px);border-color:rgba(0,212,170,.15)}
+/* CARDS — DARK */
+.card-d{background:rgba(11,16,24,.6);border-radius:24px;padding:36px;border:1px solid rgba(255,255,255,.05);backdrop-filter:blur(16px);transition:all .5s}
+.card-d:hover{border-color:rgba(255,255,255,.1);transform:translateY(-2px)}
+
+/* BEFORE/AFTER */
+.ba-grid{display:grid;grid-template-columns:1fr 60px 1fr;gap:0;align-items:stretch}
+@media(max-width:768px){.ba-grid{grid-template-columns:1fr;gap:24px}}
+.ba-card{border-radius:24px;padding:36px 32px}
+.ba-old{background:rgba(255,107,107,.04);border:2px solid rgba(255,107,107,.12)}
+.ba-new{background:rgba(0,212,170,.04);border:2px solid rgba(0,212,170,.12)}
+.ba-price-old{font-family:'Syne',sans-serif;font-weight:800;color:var(--red);font-size:clamp(40px,6vw,60px);line-height:1;position:relative;display:inline-block}
+.ba-price-old::after{content:'';position:absolute;top:50%;left:-6px;right:-6px;height:4px;background:var(--red);transform:rotate(-8deg);border-radius:2px}
+.ba-price-new{font-family:'Syne',sans-serif;font-weight:800;color:var(--mint);font-size:clamp(40px,6vw,60px);line-height:1}
+.ba-divider{display:flex;align-items:center;justify-content:center}
+@media(max-width:768px){.ba-divider svg{transform:rotate(90deg)}}
+.ba-list{list-style:none;margin-top:20px}.ba-list li{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:15px;color:#5a6b82}
+
+/* PROMISE */
+.promise-card{border-radius:20px;padding:32px;display:flex;gap:20px;align-items:flex-start;transition:all .4s;position:relative;overflow:hidden;counter-increment:p}
+.promise-card::before{content:counter(p,decimal-leading-zero);font-family:'Syne',sans-serif;font-size:72px;font-weight:800;color:rgba(0,212,170,.04);position:absolute;right:24px;top:8px;line-height:1}
+.promise-card:hover{transform:translateY(-2px);box-shadow:0 8px 40px rgba(0,0,0,.07)}
+.promise-ic{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:26px;background:rgba(0,212,170,.08);border:1px solid rgba(0,212,170,.12)}
+
+/* CALC */
+.calc-wrap{border-radius:28px;overflow:hidden;background:var(--dark);color:white;box-shadow:0 20px 80px rgba(0,0,0,.15)}
+.calc-prog{height:4px;background:rgba(255,255,255,.03)}.calc-bar{height:100%;transition:width .7s;background:linear-gradient(90deg,var(--mint),var(--gold))}
+.calc-body{padding:32px;min-height:400px;display:flex;flex-direction:column;justify-content:space-between}
+@media(min-width:640px){.calc-body{padding:48px 56px}}
+.calc-num{font-family:'Syne',sans-serif;font-weight:800;color:white;line-height:.85;font-size:clamp(4rem,12vw,6rem)}
+input[type=range]{-webkit-appearance:none;width:100%;height:6px;border-radius:3px;outline:none;background:linear-gradient(90deg,var(--mint),var(--gold));margin:20px 0 8px;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:32px;height:32px;background:var(--dark);border:3px solid var(--mint);border-radius:50%;box-shadow:0 0 24px rgba(0,212,170,.5);cursor:pointer}
+.hg{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:480px){.hg{grid-template-columns:1fr 1fr}}
+.hb{padding:18px;border-radius:18px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.03);color:white;text-align:center;transition:all .3s;font-family:inherit;font-size:14px;cursor:pointer}
+.hb:hover{border-color:rgba(255,255,255,.1)}.hb.a{border-color:rgba(0,212,170,.3);background:rgba(0,212,170,.06)}
+.rb{padding:14px;border-radius:14px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);color:var(--gl);font-size:14px;font-weight:500;transition:all .3s;font-family:inherit;cursor:pointer}
+.rb.a{border-color:rgba(212,168,68,.3);background:rgba(212,168,68,.05);color:var(--gold)}
+.btn-mint{display:inline-flex;align-items:center;gap:12px;background:var(--mint);color:var(--dark);padding:16px 32px;border-radius:100px;font-weight:700;font-size:18px;transition:all .3s;border:none;box-shadow:0 4px 24px rgba(0,212,170,.3)}
+.btn-mint:hover{background:var(--mint2);box-shadow:0 8px 40px rgba(0,212,170,.45);transform:translateY(-1px)}
+.btn-back-d{padding:14px 24px;border-radius:100px;border:1px solid rgba(255,255,255,.08);color:var(--gl);font-size:14px;background:none;transition:all .3s;font-family:inherit;cursor:pointer}.btn-back-d:hover{color:white;border-color:rgba(255,255,255,.15)}
+.result-num{font-family:'Syne',sans-serif;font-weight:800;line-height:.85;letter-spacing:-.04em;margin-bottom:12px;font-size:clamp(5rem,15vw,9rem)}
+
+/* PROCESS — LIGHT */
+.proc-step-l{display:flex;gap:24px;margin-bottom:48px;position:relative}
+@media(min-width:640px){.proc-step-l{gap:36px}}
+.proc-step-l:last-child{margin-bottom:0}
+.proc-node-l{width:56px;height:56px;border-radius:18px;background:rgba(0,212,170,.06);border:1px solid rgba(0,212,170,.12);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;transition:all .4s}
+.proc-step-l:hover .proc-node-l{background:rgba(0,212,170,.1);box-shadow:0 4px 20px rgba(0,212,170,.12);transform:scale(1.05)}
+.proc-step-l:hover .proc-title-l{color:var(--mint)}
+.proc-title-l{font-family:'Syne',sans-serif;font-size:clamp(18px,2.5vw,22px);font-weight:700;margin-bottom:6px;transition:color .3s}
+.proc-line-l{position:absolute;left:27px;top:56px;bottom:-48px;width:2px;background:linear-gradient(to bottom,rgba(0,212,170,.12),rgba(0,212,170,.04));border-radius:1px}
+.proc-step-l:last-child .proc-line-l{display:none}
+
+/* REVIEWS — LIGHT */
+.rev-grid-l{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:768px){.rev-grid-l{grid-template-columns:1fr}}
+.rev-card-l{border-radius:24px;padding:32px;border:1px solid rgba(0,0,0,.06);background:var(--ww);box-shadow:0 2px 16px rgba(0,0,0,.03);transition:all .4s;display:flex;flex-direction:column;height:100%;position:relative;overflow:hidden}
+.rev-card-l:hover{box-shadow:0 8px 40px rgba(0,0,0,.08);transform:translateY(-4px)}
+
+/* FAQ */
+.faq-item-l{border-radius:16px;overflow:hidden;margin-bottom:8px;border:1px solid rgba(0,0,0,.06);background:var(--ww);transition:all .3s}
+.faq-item-l:hover{border-color:rgba(0,212,170,.15)}
+.faq-btn-l{width:100%;text-align:left;padding:22px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;background:none;border:none;color:var(--txt);font-family:'Syne',sans-serif;font-weight:600;font-size:16px;line-height:1.4;cursor:pointer}
+.faq-chev{flex-shrink:0;color:var(--g);transition:transform .3s}.faq-chev.open{transform:rotate(180deg)}
+.faq-ans-l{padding:0 24px 22px;color:#5a6b82;font-size:15px;line-height:1.8;border-top:1px solid rgba(0,0,0,.04);padding-top:16px;animation:fadeUp .3s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+/* FINAL CTA — DARK CINEMATIC */
+.final-cta{padding:140px 0;text-align:center;position:relative;overflow:hidden;background:var(--dark);color:white}
+.final-mesh{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(0,212,170,.06),transparent 60%)}
+.btn-huge{display:inline-flex;align-items:center;gap:16px;background:var(--mint);color:var(--dark);padding:28px 56px;border-radius:100px;font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(20px,3vw,30px);transition:all .4s;border:none;box-shadow:0 8px 50px rgba(0,212,170,.4)}
+.btn-huge:hover{background:var(--mint2);box-shadow:0 12px 80px rgba(0,212,170,.6);transform:translateY(-3px)}
+
+/* FOOTER */
+footer{background:var(--dark);color:rgba(255,255,255,.5);border-top:1px solid rgba(255,255,255,.04)}
+.ft-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+@media(max-width:768px){.ft-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.ft-grid{grid-template-columns:1fr}}
+.ft-col h4{font-size:10px;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.ft-col a{display:block;font-size:14px;color:rgba(255,255,255,.4);margin-bottom:8px;transition:color .3s}.ft-col a:hover{color:var(--mint)}
+
+/* STICKY */
+.sticky{position:fixed;bottom:0;left:0;right:0;z-index:50;transform:translateY(100%);transition:transform .5s}.sticky.v{transform:translateY(0)}
+@media(min-width:1024px){.sticky{display:none}}
+.sticky-in{background:rgba(5,9,16,.92);backdrop-filter:blur(24px);border-top:1px solid rgba(0,212,170,.1);padding:12px}
+.sticky a{display:flex;align-items:center;justify-content:center;gap:12px;background:var(--mint);color:var(--dark);width:100%;padding:16px;border-radius:16px;font-weight:700;font-size:16px;box-shadow:0 0 30px rgba(0,212,170,.3)}
+
+/* VIDEO SECTION */
+.video-section{position:relative;height:60vh;min-height:400px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.video-section video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.video-section .overlay{position:absolute;inset:0;background:rgba(5,9,16,.65)}
+.video-section .content{position:relative;z-index:10;text-align:center;color:white;padding:0 24px;max-width:700px}
+
+/* PHONE SVG */
+.ph svg{display:inline-block;vertical-align:middle}
+@keyframes phone-ring{0%{transform:rotate(0)}10%{transform:rotate(14deg)}20%{transform:rotate(-9deg)}30%{transform:rotate(11deg)}40%{transform:rotate(-4deg)}50%,100%{transform:rotate(0)}}
+.phone-ring:hover .ph-ic{animation:phone-ring .8s ease-in-out}
+@keyframes breathe{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.8;transform:scale(1.05)}}
+</style>
+</head>
+<body>
+
+<div id="sp"></div>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+<div class="nav-i">
+  <a href="#" class="nav-logo">
+    <div class="nav-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+    <div style="line-height:1"><span class="fd" style="font-size:18px;font-weight:700;letter-spacing:-.02em;display:block;color:white" id="nav-title">JUMAX</span><span style="font-size:8px;letter-spacing:.25em;color:rgba(255,255,255,.4);text-transform:uppercase" id="nav-sub">Elektrotechnik</span></div>
+  </a>
+  <div class="nav-lk" id="nav-links">
+    <a href="#versprechen">Unsere Versprechen</a><a href="#system">System</a><a href="#rechner">Spar-Rechner</a><a href="#prozess">Ablauf</a><a href="#team">Team</a><a href="#faq">FAQ</a>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a href="tel:054713954790" class="nav-cta phone-ring"><span class="ph-ic">📞</span> <span id="nav-cta-text" style="display:none">Anrufen</span></a>
+    <button class="m-btn" onclick="document.getElementById('mm').classList.toggle('open')" id="m-btn-el">☰</button>
+  </div>
+</div>
+<div class="m-menu" id="mm">
+  <a href="#versprechen" onclick="this.parentElement.classList.remove('open')">Unsere Versprechen</a>
+  <a href="#system" onclick="this.parentElement.classList.remove('open')">System</a>
+  <a href="#rechner" onclick="this.parentElement.classList.remove('open')">Spar-Rechner</a>
+  <a href="#prozess" onclick="this.parentElement.classList.remove('open')">Ablauf</a>
+  <a href="#team" onclick="this.parentElement.classList.remove('open')">Team</a>
+  <a href="#faq" onclick="this.parentElement.classList.remove('open')">FAQ</a>
+  <div style="margin-top:16px"><a href="tel:054713954790" style="display:flex;align-items:center;justify-content:center;gap:12px;background:var(--mint);color:var(--dark);padding:16px;border-radius:16px;font-weight:700;font-size:18px">📞 05471 39 54 790</a></div>
+</div>
+</nav>
+
+<!-- ═══════════════════════ HERO — CINEMATIC ═══════════════════════ -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="hero-mesh"></div>
+    <!-- Video: Replace src with your own footage of solar/heat pump installation -->
+    <video class="hero-video" autoplay muted loop playsinline poster="">
+      <source src="https://videos.pexels.com/video-files/6976054/6976054-uhd_2560_1440_30fps.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <!-- Animated particles -->
+    <div class="hero-particles" id="particles"></div>
+    <!-- Glowing orbs -->
+    <div class="hero-gradient-orb" style="width:500px;height:500px;background:var(--mint);opacity:.04;top:10%;left:-5%;animation-delay:0s"></div>
+    <div class="hero-gradient-orb" style="width:400px;height:400px;background:var(--gold);opacity:.03;bottom:5%;right:-5%;animation-delay:4s"></div>
+  </div>
+
+  <div class="hero-inner" style="padding-top:140px;padding-bottom:80px">
+    <div style="max-width:720px">
+      <div class="rv" style="margin-bottom:32px">
+        <div style="display:inline-flex;align-items:center;gap:10px;padding:8px 18px;border-radius:100px;background:rgba(255,255,255,.06);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.08)">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--gold);animation:breathe 2.5s ease-in-out infinite"></div>
+          <span style="color:var(--gold);font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase">Meisterbetrieb · Bohmte · seit 2009</span>
+        </div>
+      </div>
+
+      <h1 class="rv d1">
+        <span>Dein Dach macht Strom.</span>
+        <span>Dein Strom macht Wärme.</span>
+        <span class="text-shine">Wir machen den Rest.</span>
+      </h1>
+
+      <p class="rv d2 hero-sub">
+        Photovoltaik × Wärmepumpe als ein System. Geplant, gebaut und betreut von einem Team aus deiner Nachbarschaft — ohne Subunternehmer, ohne Warteschleife.
+      </p>
+
+      <div class="rv d2 hero-ctas">
+        <a href="tel:054713954790" class="btn-hero phone-ring"><span class="ph-ic">📞</span> 05471 39 54 790</a>
+        <a href="#rechner" class="btn-hero-s">📊 Was kann ich sparen?</a>
+      </div>
+
+      <div class="rv d3 hero-trust">
+        <span>✓ 500+ Anlagen installiert</span>
+        <span>✓ 0 Subunternehmer</span>
+        <span>✓ 4,9★ Google</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll"><span>Scroll</span><div class="scroll-line"><div class="scroll-line-inner"></div></div></div>
+</section>
+
+<!-- USP COUNTER BANNER -->
+<section class="usp-banner">
+<div class="cx"><div class="usp-grid">
+  <div class="rv usp-item"><div class="usp-num" style="color:var(--mint)" id="c1">0</div><div class="usp-label">installierte Anlagen</div></div>
+  <div class="rv d1 usp-item"><div class="usp-num" style="color:var(--gold2)">0</div><div class="usp-label">Subunternehmer. Null. Nada.</div></div>
+  <div class="rv d2 usp-item"><div class="usp-num" style="color:white">30<span style="font-size:.45em;opacity:.4;margin-left:4px">min</span></div><div class="usp-label">und wir stehen vor deiner Tür</div></div>
+</div></div>
+</section>
+
+<!-- ═══ VERSPRECHEN — LIGHT ═══ -->
+<section id="versprechen" class="section-light">
+<div class="cm">
+  <div class="rv sl-l">Was uns unterscheidet</div>
+  <h2 class="rv st-l" style="font-size:clamp(28px,4.5vw,48px);margin-bottom:16px">5 Versprechen, die wir <span class="mint-text">wirklich halten.</span></h2>
+  <p class="rv" style="color:#5a6b82;font-size:18px;margin-bottom:48px;max-width:560px;line-height:1.7">Nicht weil es gut klingt. Sondern weil wir so arbeiten — bei jedem Projekt.</p>
+  <div style="counter-reset:p" id="promises-el"></div>
+</div>
+</section>
+
+<!-- ═══ VORHER/NACHHER — LIGHT ALT ═══ -->
+<section class="section-light-alt">
+<div class="cm">
+  <div class="rv sl-l">Vorher → Nachher</div>
+  <h2 class="rv st-l" style="font-size:clamp(28px,4.5vw,48px);margin-bottom:16px">So verändert sich deine <span class="mint-text">monatliche Rechnung.</span></h2>
+  <p class="rv" style="color:#5a6b82;font-size:18px;margin-bottom:48px">150m² Einfamilienhaus, aktuell Gasheizung:</p>
+  <div class="rv ba-grid">
+    <div class="ba-card ba-old"><span style="font-size:12px;font-weight:700;color:var(--red);letter-spacing:.15em;text-transform:uppercase;margin-bottom:20px;display:block">Vorher</span><div class="ba-price-old">385€</div><span style="color:#5a6b82;font-size:14px;margin-top:8px;display:block">/ Monat für Strom + Heizung</span><ul class="ba-list"><li><span style="color:var(--red)">✗</span> Gaspreise steigen jährlich</li><li><span style="color:var(--red)">✗</span> 100% abhängig vom Markt</li><li><span style="color:var(--red)">✗</span> CO₂-Steuer wird teurer</li></ul></div>
+    <div class="ba-divider"><svg width="48" height="48" viewBox="0 0 48 48" fill="none"><path d="M8 24h32M32 16l8 8-8 8" stroke="var(--mint)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="ba-card ba-new"><span style="font-size:12px;font-weight:700;color:var(--mint);letter-spacing:.15em;text-transform:uppercase;margin-bottom:20px;display:block">Nachher · mit JUMAX</span><div class="ba-price-new">~135€</div><span style="color:#5a6b82;font-size:14px;margin-top:8px;display:block">/ Monat — du sparst <strong style="color:var(--mint)">~250€</strong></span><ul class="ba-list"><li><span style="color:var(--mint)">✓</span> Eigener Strom vom Dach</li><li><span style="color:var(--mint)">✓</span> Heizung läuft mit Solarstrom</li><li><span style="color:var(--mint)">✓</span> Unabhängig von Preiserhöhungen</li></ul></div>
+  </div>
+  <div class="rv" style="text-align:center;margin-top:48px"><a href="#rechner" class="btn-mint">📊 Berechne deine persönliche Ersparnis</a></div>
+</div>
+</section>
+
+<!-- ═══ SYSTEM — DARK CINEMATIC ═══ -->
+<section id="system" class="section-dark">
+<div class="section-dark-mesh"></div>
+<div class="cx" style="position:relative;z-index:1">
+  <div class="rv sl-d">Das Energie-System</div>
+  <h2 class="rv fd" style="font-size:clamp(28px,4.5vw,48px);font-weight:800;line-height:1.05;color:white;margin-bottom:20px;max-width:640px;letter-spacing:-.02em">Dein Dach produziert. Dein Haus verbraucht. <span class="text-shine">Nichts geht verloren.</span></h2>
+  <p class="rv" style="color:var(--gl);font-size:18px;max-width:600px;margin-bottom:48px;line-height:1.7">PV-Anlage, Wärmepumpe, Speicher und Energiemanagement — perfekt aufeinander abgestimmt, installiert von einem Team.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" class="sys-g2">
+    <div class="rv card-d" style="position:relative;overflow:hidden"><div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:var(--gold);opacity:.04;filter:blur(80px)"></div><div style="font-size:32px;margin-bottom:16px">☀️</div><h3 class="fd" style="font-size:20px;font-weight:700;margin-bottom:12px;color:white">Photovoltaik</h3><p style="color:var(--gl);font-size:15px;line-height:1.7;margin-bottom:16px">8.000–12.000 kWh/Jahr. 25+ Jahre Garantie. Überschuss = Geld zurück.</p><div style="padding-top:16px;border-top:1px solid rgba(255,255,255,.05)"><span class="fd" style="font-size:28px;font-weight:700;color:var(--gold)">~2.400€</span><span style="color:var(--gl);font-size:14px;margin-left:4px">/Jahr</span></div></div>
+    <div class="rv d1 card-d" style="position:relative;overflow:hidden"><div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:var(--mint);opacity:.04;filter:blur(80px)"></div><div style="font-size:32px;margin-bottom:16px">🌡️</div><h3 class="fd" style="font-size:20px;font-weight:700;margin-bottom:12px;color:white">Wärmepumpe</h3><p style="color:var(--gl);font-size:15px;line-height:1.7;margin-bottom:16px">1 kWh rein → 3–5 kWh Wärme. Kühlt im Sommer. Kein Gas, kein CO₂.</p><div style="padding-top:16px;border-top:1px solid rgba(255,255,255,.05)"><span class="fd" style="font-size:28px;font-weight:700;color:var(--mint)">~1.800€</span><span style="color:var(--gl);font-size:14px;margin-left:4px">/Jahr</span></div></div>
+  </div>
+  <style>@media(max-width:768px){.sys-g2{grid-template-columns:1fr!important}}</style>
+  <div class="rv d2 card-d" style="margin-top:16px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px"><div><p style="color:var(--gl);font-size:18px">Alles zusammen als System:</p></div><div style="display:flex;align-items:baseline;gap:8px"><span class="fd text-shine" style="font-size:clamp(36px,5vw,52px);font-weight:800">~5.200€</span><span style="color:var(--gl)">/Jahr Ersparnis</span></div></div>
+</div>
+</section>
+
+<!-- ═══ CALCULATOR — EMBEDDED DARK ═══ -->
+<section id="rechner" class="section-light">
+<div class="cs">
+  <div class="rv sl-l">In 30 Sekunden</div>
+  <h2 class="rv st-l" style="font-size:clamp(28px,4.5vw,44px);margin-bottom:12px">Was sparst du <span class="mint-text">konkret?</span></h2>
+  <p class="rv" style="color:#5a6b82;font-size:18px;margin-bottom:40px">Drei Angaben. Keine E-Mail. Sofort dein Ergebnis.</p>
+  <div class="rv calc-wrap" id="calc"><div class="calc-prog"><div class="calc-bar" id="cprog" style="width:33%"></div></div><div class="calc-body" id="cbody"></div></div>
+</div>
+</section>
+
+<!-- ═══ PROCESS — LIGHT ═══ -->
+<section id="prozess" class="section-light-alt">
+<div class="cm">
+  <div class="rv sl-l">Dein Weg</div>
+  <h2 class="rv st-l" style="font-size:clamp(28px,4.5vw,44px);margin-bottom:16px">Vom Anruf zur <span class="mint-text">eigenen Energie.</span></h2>
+  <p class="rv" style="color:#5a6b82;font-size:18px;margin-bottom:56px;max-width:520px">Kein Papierkram-Chaos. So einfach geht's:</p>
+  <div id="proc-el"></div>
+  <div class="rv" style="text-align:center;margin-top:56px"><a href="tel:054713954790" class="btn-mint phone-ring" style="font-size:16px"><span class="ph-ic">📞</span> Schritt 1: Jetzt anrufen</a></div>
+</div>
+</section>
+
+<!-- ═══ TEAM — LIGHT ═══ -->
+<section id="team" class="section-light">
+<div class="cx" id="team-el"></div>
+</section>
+
+<!-- ═══ REVIEWS — LIGHT ALT ═══ -->
+<section id="referenzen" class="section-light-alt">
+<div class="cx" id="rev-el"></div>
+</section>
+
+<!-- ═══ FAQ — LIGHT ═══ -->
+<section id="faq" class="section-light">
+<div class="cs" id="faq-el"></div>
+</section>
+
+<!-- ═══ FINAL CTA — DARK CINEMATIC ═══ -->
+<section class="final-cta">
+<div class="final-mesh"></div>
+<div class="hero-gradient-orb" style="width:400px;height:400px;background:var(--mint);opacity:.03;top:30%;left:20%"></div>
+<div class="cs" style="position:relative;z-index:10">
+  <div class="rv"><h2 class="fd" style="font-weight:800;line-height:1;margin-bottom:24px;font-size:clamp(28px,6vw,52px);letter-spacing:-.03em;color:white">Bereit, weniger zu<br>bezahlen?</h2></div>
+  <div class="rv d1"><p style="font-size:20px;color:var(--gl);margin-bottom:48px;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7">Ein Anruf. Ein ehrliches Gespräch.<br>Kein Verkaufsdruck — versprochen.</p></div>
+  <div class="rv d2"><a href="tel:054713954790" class="btn-huge phone-ring"><span class="ph-ic">📞</span> 05471 39 54 790</a></div>
+  <div class="rv d3" style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px 24px;margin-top:36px;font-size:14px;color:var(--gl)"><span>🕐 Mo–Do 09–16 · Fr 09–13</span><span style="color:rgba(255,255,255,.08)">|</span><span>📍 Bohmte, Wittlager Land</span></div>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+<div class="cx" style="padding:56px 24px">
+<div class="ft-grid" style="margin-bottom:40px">
+  <div class="ft-col"><div style="display:flex;align-items:center;gap:8px;margin-bottom:16px"><div style="width:28px;height:28px;border-radius:6px;background:linear-gradient(135deg,var(--mint),#00a88a);display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><span class="fd" style="font-weight:700;color:white">JUMAX</span></div><p style="font-size:12px;line-height:1.7">Jumax Elektrotechnik GmbH<br>Heggenkamp 9b · 49163 Bohmte</p></div>
+  <div class="ft-col"><h4>Leistungen</h4><a href="#">Photovoltaik</a><a href="#">Wärmepumpe</a><a href="#">Haustechnik</a><a href="#">Klimatechnik</a></div>
+  <div class="ft-col"><h4>Kontakt</h4><a href="tel:054713954790">05471 39 54 790</a><a href="/cdn-cgi/l/email-protection#ddb4b3bbb29db7a8b0bca5f0b8b1b8b6a9afb2f3b9b8"><span class="__cf_email__" data-cfemail="731a1d151c3319061e120b5e161f161807011c5d1716">[email&#160;protected]</span></a><p style="font-size:12px;margin-top:4px">Mo–Do 09–16 · Fr 09–13</p></div>
+  <div class="ft-col"><h4>Rechtliches</h4><a href="https://www.jumax-elektro.de/rechtliches/impressum">Impressum</a><a href="https://www.jumax-elektro.de/rechtliches/datenschutz">Datenschutz</a></div>
+</div>
+<div style="padding-top:24px;border-top:1px solid rgba(255,255,255,.04);text-align:center;font-size:10px;letter-spacing:.04em">© 2026 Jumax Elektrotechnik GmbH</div>
+</div>
+</footer>
+
+<!-- STICKY -->
+<div class="sticky" id="sticky"><div class="sticky-in"><a href="tel:054713954790" class="phone-ring"><span class="ph-ic">📞</span> Jetzt kostenlos beraten lassen</a></div></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ═══ NAV + SCROLL ═══
+const navEl=document.getElementById('nav'),navTitle=document.getElementById('nav-title'),navSub=document.getElementById('nav-sub'),navCta=document.getElementById('nav-cta-text');
+window.addEventListener('scroll',()=>{
+  const s=scrollY>80;
+  navEl.classList.toggle('scrolled',s);
+  navTitle.style.color=s?'var(--txt)':'white';
+  navSub.style.color=s?'var(--g)':'rgba(255,255,255,.4)';
+  if(navCta)navCta.style.display=s?'inline':'none';
+  document.getElementById('sp').style.width=(scrollY/(document.body.scrollHeight-innerHeight)*100)+'%';
+  document.getElementById('sticky').classList.toggle('v',scrollY>600);
+});
+
+// ═══ REVEAL ═══
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('v');obs.unobserve(x.target)}})},{threshold:.08});
+function oA(){document.querySelectorAll('.rv:not(.v)').forEach(el=>obs.observe(el))}
+oA();
+
+// ═══ HERO PARTICLES ═══
+const pEl=document.getElementById('particles');
+for(let i=0;i<25;i++){const p=document.createElement('div');p.className='particle';p.style.cssText=`left:${Math.random()*100}%;animation-duration:${8+Math.random()*12}s;animation-delay:${Math.random()*10}s;width:${1+Math.random()*2}px;height:${1+Math.random()*2}px`;pEl.appendChild(p)}
+
+// ═══ COUNTER ═══
+let counted=false;
+const cObs=new IntersectionObserver(e=>{if(e[0].isIntersecting&&!counted){counted=true;const el=document.getElementById('c1');let c=0;const t=setInterval(()=>{c+=3;if(c>=500){c=500;clearInterval(t)}el.textContent=c+'+'},12)}},{threshold:.3});
+cObs.observe(document.getElementById('c1'));
+
+// ═══ PROMISES ═══
+const promises=[
+  {ic:'🔧',t:'Null Subunternehmer.',d:'Andere schicken Fremde auf dein Dach. Bei uns kommt unser eigenes Meisterteam — von der ersten Schraube bis zum letzten Kabel.'},
+  {ic:'📞',t:'Echte Menschen am Telefon.',d:'Kein Bot, keine Warteschleife. Du rufst an, jemand geht ran, der sich auskennt. Wenn nicht — Rückruf am selben Tag.'},
+  {ic:'📋',t:'Festpreis = Festpreis.',d:'Was im Angebot steht, zahlst du. Keine versteckten Kosten, keine Nachträge, keine Überraschungen. Das garantieren wir schriftlich.'},
+  {ic:'🏠',t:'Ein Team. Alles aus einer Hand.',d:'PV, Wärmepumpe, Speicher, Zählerkasten, Wallbox — wir machen alles selbst. Du hast einen Ansprechpartner, nicht fünf.'},
+  {ic:'📍',t:'Wenn was ist — wir kommen vorbei.',d:'Wir sind keine Firma aus Berlin. Wir wohnen hier. In 30 Minuten stehen wir vor deiner Tür. Auch nach der Installation.'},
+];
+document.getElementById('promises-el').innerHTML=promises.map(p=>`<div class="rv promise-card card-l"><div class="promise-ic">${p.ic}</div><div><div class="fd" style="font-size:18px;font-weight:700;margin-bottom:6px;color:var(--txt)">${p.t}</div><p style="font-size:15px;color:#5a6b82;line-height:1.7">${p.d}</p></div></div>`).join('');
+oA();
+
+// ═══ CALC ═══
+let cS=1,cSz=150,cH='gas',cR='saddle';
+const hC={gas:14,oil:16,electric:22,other:15},rF={saddle:1,flat:.85,walm:.9,pult:1.05};
+function rc(){
+  document.getElementById('cprog').style.width=(cS/3*100)+'%';
+  const b=document.getElementById('cbody');
+  if(cS===1)b.innerHTML=`<div><p style="font-size:14px;color:var(--gl);margin-bottom:8px">Schritt 1 von 3</p><h3 class="fd" style="font-size:22px;font-weight:700;margin-bottom:32px;color:white">Wie groß ist dein Zuhause?</h3><div style="display:flex;align-items:flex-end;gap:12px"><span class="calc-num" id="sd">${cSz}</span><span style="font-size:22px;color:var(--gl);margin-bottom:12px">m²</span></div><input type="range" min=60 max=350 value="${cSz}" oninput="cSz=+this.value;document.getElementById('sd').textContent=cSz"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--gl);opacity:.5"><span>60</span><span>200</span><span>350</span></div></div><div style="margin-top:36px"><button class="btn-mint" onclick="cS=2;rc()">Weiter →</button></div>`;
+  else if(cS===2)b.innerHTML=`<div><p style="font-size:14px;color:var(--gl);margin-bottom:8px">Schritt 2 von 3</p><h3 class="fd" style="font-size:22px;font-weight:700;margin-bottom:28px;color:white">Wie heizt du? Welches Dach?</h3><p style="color:var(--gl);font-size:14px;margin-bottom:12px;font-weight:600">Heizungstyp</p><div class="hg" style="margin-bottom:28px">${[['gas','Gas','🔥'],['oil','Öl','🛢'],['electric','Strom','⚡'],['other','Andere','📦']].map(([v,l,e])=>`<button class="hb ${cH===v?'a':''}" onclick="cH='${v}';rc()"><div style="font-size:26px;margin-bottom:8px">${e}</div><div>${l}</div></button>`).join('')}</div><p style="color:var(--gl);font-size:14px;margin-bottom:12px;font-weight:600">Dachform</p><div class="hg">${[['saddle','Satteldach'],['flat','Flachdach'],['walm','Walmdach'],['pult','Pultdach']].map(([v,l])=>`<button class="rb ${cR===v?'a':''}" onclick="cR='${v}';rc()">${l}</button>`).join('')}</div></div><div style="display:flex;gap:12px;margin-top:32px"><button class="btn-back-d" onclick="cS=1;rc()">Zurück</button><button class="btn-mint" style="flex:1" onclick="cS=3;rc()">Was spare ich? →</button></div>`;
+  else{const pv=Math.round(cSz*5.5*rF[cR]),wp=Math.round(cSz*hC[cH]*.55),t=pv+wp,m=Math.round(t/12);
+  b.innerHTML=`<div style="text-align:center"><p style="font-size:13px;color:var(--gl);letter-spacing:.15em;text-transform:uppercase;margin-bottom:16px">Monatliche Ersparnis</p><div class="result-num text-shine">${m}€</div><p style="color:var(--gl);font-size:16px;margin-bottom:32px">pro Monat · <strong style="color:white">${t.toLocaleString('de-DE')}€/Jahr</strong></p><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px;text-align:left">${[['☀️','PV',pv,'var(--mint)'],['🌡️','WP',wp,'var(--gold)']].map(([e,l,v,c])=>`<div class="card-d" style="padding:20px"><div style="font-size:12px;color:var(--gl);margin-bottom:4px">${e} ${l}</div><span class="fd" style="font-size:24px;font-weight:700;color:${c}">${v.toLocaleString('de-DE')}€</span> <span style="font-size:12px;color:var(--gl)">/Jahr</span></div>`).join('')}</div><div style="border-radius:20px;padding:28px 32px;background:linear-gradient(135deg,rgba(0,212,170,.06),rgba(212,168,68,.04));border:1px solid rgba(0,212,170,.1)"><p style="color:var(--gl);font-size:18px;margin-bottom:6px">Klingt gut?</p><p style="font-size:14px;color:var(--gl);margin-bottom:24px">Wir schauen uns dein Haus an und machen dir ein echtes Angebot.</p><a href="tel:054713954790" class="btn-mint phone-ring" style="font-size:18px;padding:20px 36px"><span class="ph-ic">📞</span> Jetzt anrufen</a><p style="font-size:11px;color:var(--gl);margin-top:12px">Kostenlos · Mo–Do 09–16 · Fr 09–13</p></div><button style="background:none;border:none;color:var(--gl);cursor:pointer;font-size:14px;margin-top:24px;font-family:inherit" onclick="cS=1;rc()">← Nochmal rechnen</button></div>`}}
+rc();
+
+// ═══ PROCESS ═══
+const steps=[{n:'1',t:'Du rufst an',d:'Kein Bot, kein Formular. Du erreichst direkt jemanden, der sich auskennt.',e:'📞',time:'~10 Min'},{n:'2',t:'Wir kommen vorbei',d:'Meister kommt, schaut sich alles an. Ehrliche Einschätzung, kein Verkaufsgespräch.',e:'🏠',time:'~60 Min'},{n:'3',t:'Klares Angebot',d:'Festpreis. Alles aufgeschlüsselt. Förderung ausgerechnet. Keine Überraschungen.',e:'📋',time:'3–5 Tage'},{n:'4',t:'Wir bauen',d:'Unser Team. Keine Subunternehmer. Saubere Arbeit.',e:'🔧',time:'2–5 Tage'},{n:'5',t:'Läuft.',d:'Inbetriebnahme, Erklärung, und wir bleiben für dich erreichbar.',e:'⚡',time:'Ab Tag 1'}];
+document.getElementById('proc-el').innerHTML=steps.map((s,i)=>`<div class="rv proc-step-l">${i<steps.length-1?'<div class="proc-line-l"></div>':''}<div class="proc-node-l">${s.e}</div><div><div style="display:flex;align-items:center;gap:12px;margin-bottom:6px"><span class="fd" style="font-size:12px;font-weight:700;color:var(--mint);letter-spacing:.15em">Schritt ${s.n}</span><span style="font-size:10px;padding:3px 10px;border-radius:100px;background:rgba(0,212,170,.06);color:var(--mint);border:1px solid rgba(0,212,170,.1)">${s.time}</span></div><div class="proc-title-l">${s.t}</div><p style="color:#5a6b82;line-height:1.7;font-size:15px;max-width:520px">${s.d}</p></div></div>`).join('');
+oA();
+
+// ═══ TEAM ═══
+const cities=['Bohmte','Osnabrück','Melle','Bad Essen','Bissendorf','Bramsche','Belm','GMHütte','Lübbecke','Diepholz'];
+document.getElementById('team-el').innerHTML=`
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center" class="team-lay">
+<div>
+  <div class="rv sl-l">Wer wir sind</div>
+  <h2 class="rv st-l" style="font-size:clamp(28px,4.5vw,44px);margin-bottom:20px">Kein Konzern. Keine Hotline.<br><span class="mint-text">Deine Nachbarn.</span></h2>
+  <p class="rv" style="color:#5a6b82;font-size:18px;line-height:1.7;margin-bottom:20px">Junges Meisterteam aus Bohmte. Wenn du anrufst, sprichst du mit jemandem, der nächste Woche auf deinem Dach steht.</p>
+  <p class="rv" style="color:#5a6b82;font-size:18px;line-height:1.7;margin-bottom:32px">Und wenn nach zwei Jahren der Wechselrichter piept? Kommen wir vorbei. Weil wir <em>hier</em> leben.</p>
+  <div class="rv" style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    ${[['📍','Regional','30 Min. bei dir'],['🏆','Meisterbetrieb','Seit 2009'],['🤝','Persönlich','Keine Warteschleife'],['🔧','Ein Team','0 Subunternehmer'],['🛡️','Garantie','Langfristig da'],['⚡','Schnell','Kein Marathon']].map(([e,l,d])=>`<div class="card-l" style="padding:20px"><span style="font-size:18px;display:block;margin-bottom:8px">${e}</span><div class="fd" style="font-size:14px;font-weight:700;margin-bottom:2px">${l}</div><div style="font-size:13px;color:#5a6b82">${d}</div></div>`).join('')}
+  </div>
+</div>
+<div class="rv d2">
+  <div class="card-l" style="padding:32px;text-align:center">
+    <h3 class="fd" style="font-size:20px;font-weight:700;margin-bottom:8px">Einsatzgebiet</h3>
+    <p style="color:#5a6b82;font-size:14px;margin-bottom:24px">In 30 Min. bei dir vor Ort.</p>
+    <div style="width:200px;height:200px;position:relative;margin:0 auto 24px">
+      ${[0,1,2].map(i=>`<div style="position:absolute;border-radius:50%;border:2px solid var(--mint);inset:${i*22}px;opacity:${.06+i*.03};animation:pulse-ring 5s ${i}s ease-out infinite"></div>`).join('')}
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><div style="text-align:center"><div style="width:48px;height:48px;border-radius:50%;background:rgba(0,212,170,.08);border:2px solid rgba(0,212,170,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:20px">📍</div><span class="fd" style="font-size:14px;font-weight:700">Bohmte</span></div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center">${cities.map(c=>`<span style="padding:6px 14px;font-size:12px;font-weight:500;border-radius:100px;color:var(--mint);background:rgba(0,212,170,.04);border:1px solid rgba(0,212,170,.1)">${c}</span>`).join('')}</div>
+  </div>
+</div>
+</div><style>@media(max-width:1024px){.team-lay{grid-template-columns:1fr!important}}</style>`;
+oA();
+@keyframes pulse-ring{0%{transform:scale(1);opacity:.15}100%{transform:scale(2.2);opacity:0}}
+
+// ═══ REVIEWS ═══
+const reviews=[{name:'Familie Schröder',city:'Melle',proj:'PV + Speicher',text:'Von der Beratung bis zur fertigen Anlage hat alles gepasst. Kompetent, pünktlich, freundlich. Läuft seit 8 Monaten top.'},{name:'Thomas K.',city:'Bad Essen',proj:'PV + Wärmepumpe',text:'Dass beides von einem Team kommt, hat vieles einfacher gemacht. Heizkosten um ~60% runter — hätte ich nicht gedacht.'},{name:'Sandra M.',city:'Bohmte',proj:'Wärmepumpe',text:'Als Nachbarin: absolute Empfehlung. Schnell, sauber, und man erreicht immer jemanden.'},{name:'Michael & Petra W.',city:'Osnabrück',proj:'Komplettsystem',text:'Drei Angebote verglichen. JUMAX nicht das billigste — aber das ehrlichste. Keine versteckten Kosten.'}];
+const star='<svg width="14" height="14" viewBox="0 0 24 24" fill="var(--gold)" stroke="var(--gold)" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+document.getElementById('rev-el').innerHTML=`
+<div class="rv sl-l">Kundenstimmen</div>
+<h2 class="rv st-l" style="font-size:clamp(28px,4.5vw,44px);margin-bottom:16px">Was Menschen aus der Region <span class="mint-text">über uns sagen.</span></h2>
+<p class="rv" style="color:#5a6b82;font-size:18px;margin-bottom:48px">Echte Projekte. Echte Meinungen.</p>
+<div class="rev-grid-l">${reviews.map(r=>`<div class="rv rev-card-l"><div style="position:absolute;top:16px;right:24px;font-family:Syne;font-size:52px;color:var(--mint);opacity:.06">"</div><div style="display:flex;gap:2px;margin-bottom:16px">${star.repeat(5)}</div><p style="color:#4a5a72;font-size:clamp(15px,1.5vw,17px);line-height:1.7;margin-bottom:24px;flex:1;font-style:italic">"${r.text}"</p><div style="display:flex;align-items:center;justify-content:space-between;padding-top:20px;border-top:1px solid rgba(0,0,0,.05)"><div style="display:flex;align-items:center;gap:12px"><div style="width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:white;background:linear-gradient(135deg,var(--mint),var(--gold))">${r.name[0]}</div><div><div style="font-weight:600;font-size:14px">${r.name}</div><div style="font-size:11px;color:#5a6b82">📍 ${r.city}</div></div></div><span style="font-size:10px;padding:4px 12px;border-radius:100px;background:rgba(0,212,170,.06);color:var(--mint);border:1px solid rgba(0,212,170,.1)">${r.proj}</span></div></div>`).join('')}</div>`;
+oA();
+
+// ═══ FAQ ═══
+const faqs=[{q:'Was kostet eine PV-Anlage mit Speicher?',a:'Für ein typisches Einfamilienhaus: ca. 18.000–28.000€ vor Förderung. Danach oft deutlich weniger. Wir rechnen dir das kostenlos aus — mit allen Förderoptionen.'},{q:'Lohnt sich eine Wärmepumpe im Altbau?',a:'In den allermeisten Fällen ja. Moderne Wärmepumpen schaffen auch −20°C. Ob es bei dir passt, schauen wir uns vor Ort an — ehrlich und unverbindlich.'},{q:'Welche Förderungen gibt es?',a:'Wärmepumpe: bis zu 70% über BEG/BAFA. PV: Einspeisevergütung + Steuervorteile. Wir kennen die Programme und übernehmen den Antrag.'},{q:'Warum nicht einfach den günstigsten nehmen?',a:'Kannst du. Aber dann steht wahrscheinlich eine Firma auf deinem Dach, die du vorher nie gesehen hast und nachher nie wieder siehst. Wir sind vor Ort, machen alles selbst, und sind auch danach da.'},{q:'Arbeitet ihr mit Subunternehmern?',a:'Nein. Null. Unser eigenes Meisterteam macht alles. Das ist aufwändiger — aber besser.'}];
+document.getElementById('faq-el').innerHTML=`
+<div class="rv sl-l">FAQ</div>
+<h2 class="rv st-l" style="font-size:clamp(28px,4vw,40px);margin-bottom:16px">Ehrliche Antworten auf <span class="mint-text">echte Fragen.</span></h2>
+<p class="rv" style="color:#5a6b82;font-size:18px;margin-bottom:40px">Was uns am häufigsten gefragt wird.</p>
+<div>${faqs.map((f,i)=>`<div class="rv faq-item-l" id="fi${i}"><button class="faq-btn-l" onclick="tf(${i})">${f.q}<svg class="faq-chev" id="fc${i}" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button></div>`).join('')}</div>
+<div class="rv" style="text-align:center;margin-top:40px"><p style="color:#5a6b82">Noch Fragen? <a href="tel:054713954790" style="color:var(--mint);font-weight:700">Ruf einfach an.</a></p></div>`;
+oA();
+function tf(i){const it=document.getElementById('fi'+i),ch=document.getElementById('fc'+i),ex=it.querySelector('.faq-ans-l');if(ex){ex.remove();ch.classList.remove('open');return}document.querySelectorAll('.faq-ans-l').forEach(a=
